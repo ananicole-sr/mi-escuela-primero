@@ -159,7 +159,7 @@ const PORT = 3000;
 
 app.use(cors());
 
-app.get('/escuelas', (req,res) => {
+app.get('/api/escuelas', (req,res) => {
     res.json(escuelas);
 })
 
