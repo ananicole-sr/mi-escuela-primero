@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useParams } from "react-router-dom";
 import { getEscuelaById } from "../services/api";
+import NavBar from "../components/NavBar";
 
 export default function Detalles() {
     const [escuela, setEscuela] = useState(null);
@@ -27,6 +28,7 @@ export default function Detalles() {
 
     return (
         <div>
+            <NavBar/>
             <h1>{escuela?.nombre}</h1> 
             <h2>{escuela?.turno}</h2>
             <button onClick={redirect}> Back </button>

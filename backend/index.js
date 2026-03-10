@@ -173,6 +173,10 @@ app.get('/api/escuelas/:id', (req,res) => {
   }
 });
 
+app.get('/api/home', (req, res) => {
+  
+})
+
 app.listen(PORT, () => {
     console.log(`Listening in Port: ${PORT}`)
 })
