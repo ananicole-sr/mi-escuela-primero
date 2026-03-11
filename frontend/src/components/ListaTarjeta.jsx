@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getEscuelas } from "../services/api";
 import Tarjeta from "./Tarjeta";
+import Buscador from "./Buscador";
 
 export default function ListaTarjeta(){
     const [escuelas , setEscuelas] = useState([])
@@ -16,16 +17,11 @@ export default function ListaTarjeta(){
             load();
         }, []);
 
+        console.log("ListaTarjeta escuelas:", escuelas);
+        
     return (
         <div>
-            {escuelas.map((escuela) => {
-                return (
-                    <Tarjeta 
-                        key={escuela.id_escuela} 
-                        escuela={escuela} 
-                    />
-                );
-            })}
+            <Buscador escuelas={escuelas}/>
         </div>
     );
 }
