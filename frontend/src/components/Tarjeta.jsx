@@ -1,4 +1,6 @@
 import { useNavigate } from 'react-router-dom';
+import locationIcon from "../assets/location_icon.png"
+import calendarIcon from "../assets/calendar_icon.png"
 
 export default function Tarjeta( {escuela}) {
     const navigate = useNavigate();
@@ -11,9 +13,15 @@ export default function Tarjeta( {escuela}) {
         <div>
                 <div key={escuela.id_escuela} style={{ border: '1px solid #ccc', margin: '10px', padding: '10px' }}>
                     <h1>{escuela.nombre} </h1>
-                    <p>{escuela.municipio} - {escuela.nivelEducativo}</p>
+                    <address>
+                        <span> 
+                            <img src={locationIcon} alt=""/> {escuela.municipio}
+                        </span>
+                    </address>
+                    {/* <p>{escuela.municipio} - {escuela.nivelEducativo}</p> */}
 
                     <button onClick={manejarClick}> Ver Detalles </button>
+                    <small>Actualizado: 11 de marzo de 2026</small>
                 </div>
         </div>
     );
