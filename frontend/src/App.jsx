@@ -3,6 +3,7 @@ import './App.css'
 import Tarjeta from './components/Tarjeta.jsx'
 import ListaTarjeta from "./components/ListaTarjeta.jsx";
 import Detalles from "./pages/Detalles.jsx";
+import Catalogo from "./pages/Catalogo.jsx";
 import Home from "./pages/Home.jsx";
 
 function App() {
@@ -10,10 +11,9 @@ function App() {
     <>
     <BrowserRouter> 
       <Routes>
-       <Route path="/escuelas" element={<ListaTarjeta/>} />
+       <Route path="/escuelas" element={<Catalogo/>} />
        <Route path="/escuelas/:id" element={<Detalles/>} />
        <Route path="/" element={<Home/>} />
-
       </Routes>
     </BrowserRouter>
     </>)
