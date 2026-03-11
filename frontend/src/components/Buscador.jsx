@@ -4,7 +4,7 @@ import Tarjeta from "./Tarjeta";
 export default function Buscador({escuelas}){
     const [searchInp, setSearchInp] = useState("");
     const [levelInp, setLevInp] = useState("");
-    const [categInp, setCatInp] = useState("");
+    const [categInp, setCategInp] = useState("");
     const [munInp, setMunInp] = useState("");
 
 
@@ -21,7 +21,7 @@ export default function Buscador({escuelas}){
     const filteredSchools = escuelas.filter((school) => {
         const schoolName = school.nombre?.toLowerCase() || "";
         const schoolLevel = school.nivelEducativo?.toLowerCase() || "";
-        //const schoolCateg = school.cate.toLowerCase() || "";
+        const schoolCateg = school.cate.toLowerCase() || "";
         const schoolMun = school.municipio?.toLowerCase() || "";
 
 

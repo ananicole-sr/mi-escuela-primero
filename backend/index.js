@@ -12,7 +12,8 @@ const escuelas = [
     nivelEducativo: "Primaria",
     modalidad: "Escolarizada",
     turno: "Matutino",
-    sostenimiento: "Público"
+    sostenimiento: "Público",
+    categoria: "Material"
   },
   {
     id_escuela: 2,
@@ -27,7 +28,8 @@ const escuelas = [
     nivelEducativo: "Secundaria",
     modalidad: "Técnica",
     turno: "Vespertino",
-    sostenimiento: "Público"
+    sostenimiento: "Público",
+    categoria: "Infraestructura"
   },
   {
     id_escuela: 3,
@@ -42,7 +44,8 @@ const escuelas = [
     nivelEducativo: "Preescolar",
     modalidad: "Privada",
     turno: "Matutino",
-    sostenimiento: "Privado"
+    sostenimiento: "Privado",
+    categoria: "Formacion"
   },
   {
     id_escuela: 4,
@@ -57,7 +60,8 @@ const escuelas = [
     nivelEducativo: "Especial",
     modalidad: "Escolarizada",
     turno: "Matutino",
-    sostenimiento: "Público"
+    sostenimiento: "Público",
+    categoria: "Salud"
   },
   {
     id_escuela: 5,
@@ -72,7 +76,8 @@ const escuelas = [
     nivelEducativo: "Media Superior",
     modalidad: "Bivalente",
     turno: "Continuo",
-    sostenimiento: "Autónomo"
+    sostenimiento: "Autónomo",
+    categoria: "Infraestructura"
   },
   {
     id_escuela: 6,
@@ -87,7 +92,8 @@ const escuelas = [
     nivelEducativo: "Primaria",
     modalidad: "Multigrado",
     turno: "Matutino",
-    sostenimiento: "Público"
+    sostenimiento: "Público",
+    categoria: "Material"
   },
   {
     id_escuela: 7,
@@ -102,7 +108,8 @@ const escuelas = [
     nivelEducativo: "Superior",
     modalidad: "Ingeniería",
     turno: "Mixto",
-    sostenimiento: "Público"
+    sostenimiento: "Público",
+    categoria: "Formacion"
   },
   {
     id_escuela: 8,
@@ -117,7 +124,8 @@ const escuelas = [
     nivelEducativo: "Preescolar",
     modalidad: "Privada",
     turno: "Matutino",
-    sostenimiento: "Privado"
+    sostenimiento: "Privado",
+    categoria: "Material"
   },
   {
     id_escuela: 9,
@@ -132,7 +140,8 @@ const escuelas = [
     nivelEducativo: "Formación Trabajo",
     modalidad: "Presencial",
     turno: "Nocturno",
-    sostenimiento: "Público"
+    sostenimiento: "Público",
+    categoria: "Formacion"
   },
   {
     id_escuela: 10,
@@ -147,7 +156,8 @@ const escuelas = [
     nivelEducativo: "Media Superior",
     modalidad: "Telebachillerato",
     turno: "Vespertino",
-    sostenimiento: "Público"
+    sostenimiento: "Público",
+    categoria: "Infraestructura"
   }
 ];
 
