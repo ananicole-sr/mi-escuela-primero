@@ -46,27 +46,22 @@ export default function Buscador({escuelas}){
                 <option value="preescolar"> Preescolar </option>
                 <option value="primaria"> Primaria </option>
                 <option value="secundaria"> Secundaria </option>
-                <option value="media superior"> Media Superior </option>
-                <option value="superior"> Superior </option>
-                <option value="especial"> Especial </option>
             </select>
 
             <select name="categoria" id="categoria" value={categInp} onChange={handleChange}>
                 <option value=""> Todas las Categorias </option>
-                <option value="mobiliario"> Mobiliario </option>
+                <option value="material"> Material </option>
                 <option value="infraestructura"> Infraestructura </option>
-                <option value="psicologia"> Psicologia </option>
+                <option value="formacion"> Formación </option>
+                <option value="salud"> Salud </option>
             </select>
 
             <select name="municipio" id="municipio" value={munInp} onChange={handleChange}>
                 <option value=""> Todas las Municipios </option>
-                <option value="guadalajara"> Guadalajara </option>
+                <option value="arandas"> Arandas </option>
+                <option value="tlaquepaque"> San Pedro Tlaquepaque </option>
+                <option value="san juan de los lagos"> San Juan de los Lagos </option>
                 <option value="zapopan"> Zapopan </option>
-                <option value="tlaquepaque"> Tlaquepaque </option>
-                <option value="puerto vallarta"> Puerto Vallarta </option>
-                <option value="el salto">  El Salto </option>
-                <option value="tequila">  Tequila </option>
-                <option value="san juanito de escobedo">  San Juanito de Escobedo </option>
             </select>
         </form>
 
