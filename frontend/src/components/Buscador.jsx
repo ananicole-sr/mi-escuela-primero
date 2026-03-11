@@ -21,7 +21,7 @@ export default function Buscador({escuelas}){
     const filteredSchools = escuelas.filter((school) => {
         const schoolName = school.nombre?.toLowerCase() || "";
         const schoolLevel = school.nivelEducativo?.toLowerCase() || "";
-        const schoolCateg = school.cate.toLowerCase() || "";
+        const schoolCateg = school.categoria.toLowerCase() || "";
         const schoolMun = school.municipio?.toLowerCase() || "";
 
 
