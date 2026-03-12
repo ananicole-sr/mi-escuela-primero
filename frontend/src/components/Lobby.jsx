@@ -11,7 +11,7 @@ export default function Lobby(){
     return(
         <section id="lobby">
             <div id="texto_inicio">
-                <h1><strong> Conecta necesidades reales con oportunidades de impacto </strong></h1>
+                <h1 className="text-4xl font-bold text-blue-600"><strong> Conecta necesidades reales con oportunidades de impacto </strong></h1>
                 <p>Plataforma que une escuelas con necesidades específicas y donadores comprometidos. Transparente, fácil y con resultados medibles.</p>
             </div>
             <div>

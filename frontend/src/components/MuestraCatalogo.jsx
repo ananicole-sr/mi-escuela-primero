@@ -1,9 +1,7 @@
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import location from "../assets/location_icon.png"
-import Buscador from "../components/Buscador.jsx"
-import ListaTarjeta from "../components/ListaTarjeta.jsx"
-import Tarjeta from "../components/Tarjeta.jsx"
-import {getEscuelas} from "../services/api";
+import ListaTarjeta from "./ListaTarjeta.jsx"
+
 
 export default function MuestraCatalogo(){
     const navigate = useNavigate();
@@ -20,7 +18,9 @@ export default function MuestraCatalogo(){
                 {/* <Buscador/> */}
                 <ListaTarjeta mostrarBuscador={false} limite={3}/>
                 {/* <Tarjeta/> */}
+                <button onClick={()=>navigate('/escuelas')}>Ver Todas Las Escuelas</button>
             </div>
+
         </div>
     )
 }
