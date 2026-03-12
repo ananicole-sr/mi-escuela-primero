@@ -186,8 +186,17 @@ app.get('/api/escuelas/:id', (req,res) => {
   }
 });
 
-
-app.post('/api/login', (req, res) => {});
+const usuariosDB = [{usuario: "Lepe", password:"Hola"}, {usuario:"Nicole", password:"cool"}];
+app.post('/api/login', (req, res) => {
+  const { usuario, contraseña} = req.body;
+  const usuarioEncontrado = usuariosDB.find((u) => {
+    return u.usuario === usuario && u.password === contraseña;  });
+  if (usuarioEncontrado) {
+    res.status(200).json({ mensaje: "Login OK" });
+  } else {
+    res.status(401).json({ mensaje: "Error" });
+  }
+});
 
 
 app.get('/api/home', (req, res) => {
