@@ -1,5 +1,6 @@
 import "../components/Footer.css"
 import { Link } from 'react-router-dom';
+import privacyPDF from "../assets/AvisodePrivacidadMEP.pdf";
 import logo from "../assets/logoMEP.png"
 import mailIcon from  "../assets/mail_icon.png"
 import phoneIcon from "../assets/phone_icon.png"
@@ -33,7 +34,7 @@ export default function Footer(){
                 <h2 className="footer-title">Navegación</h2>
                 <Link className="footer-nav-link" to="/">Inicio</Link>
                 <Link className="footer-nav-link" to="/escuelas">Explorar Escuelas</Link>
-                <span className="footer-nav-link footer-nav-text">Aviso de privacidad</span>
+                <a href={privacyPDF} target="_blank" rel="noopener noreferrer">Aviso de privacidad</a>
                 <Link className="footer-nav-link" to="/admin">Administrador</Link>
             </section>
 
