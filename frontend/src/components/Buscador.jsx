@@ -21,7 +21,7 @@ export default function Buscador({escuelas}){
     const filteredSchools = escuelas.filter((school) => {
         const schoolName = school.nombre?.toLowerCase() || "";
         const schoolLevel = school.nivelEducativo?.toLowerCase() || "";
-        const schoolCateg = school.categoria || "";
+        const schoolCateg = Array.isArray(school.categoria) ? school.categoria : [];;
         const schoolMun = school.municipio?.toLowerCase() || "";
 
 
@@ -65,7 +65,7 @@ export default function Buscador({escuelas}){
             </select>
         </form>
 
-        <div>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
         {filteredSchools.length > 0 ? (
             filteredSchools.map((escuela) => (
                 <Tarjeta key={escuela.id_escuela} escuela={escuela} />

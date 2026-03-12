@@ -22,17 +22,16 @@ export default function ListaTarjeta({ mostrarBuscador = true, limite = null}){
         console.log("ListaTarjeta escuelas:", escuelas);
         
     return (
-        <div>
+        <div className="w-full">
             {mostrarBuscador ? (
                 <Buscador escuelas={escuelas}/>  
-            ): (
-                <div className="lista-tarjetas-sample">
-                        {escuelasAMostrar.map((escuela, index) => (
-                            <Tarjeta key={escuela.id ?? escuela.id_escuela ?? escuela.nombre ?? index} escuela={escuela}/>
-                        ))}
+            ) : (
+                <div className="lista-tarjetas-sample grid grid-cols-1 items-start gap-6 md:grid-cols-2 xl:grid-cols-3">
+                    {escuelasAMostrar.map((escuela, index) => (
+                        <Tarjeta key={escuela.id ?? escuela.id_escuela ?? escuela.nombre ?? index} escuela={escuela}/>
+                    ))}
                 </div>
-                )
-            }
+            )}
         </div>
     );
 }
