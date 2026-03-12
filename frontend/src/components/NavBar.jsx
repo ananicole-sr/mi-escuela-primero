@@ -9,8 +9,8 @@ export default function NavBar(){
             <img src = {logo} alt="Mi Escuela Primero Logo.png"/>
             <button onClick={()=>navigate('/')}>Inicio</button>
             <button onClick={()=>navigate('/escuelas')}>Explorar Escuelas</button>
-            {/* <button onClick={()=>navigate('')}>Como funciona</button>
-            <button onClick={()=>navigate('')}>Contacto</button> */}
+            <button onClick={()=>navigate('/#explainer')}>Como funciona</button>
+            {/* <button onClick={()=>navigate('')}>Contacto</button> */}
         </div>
     )
 }

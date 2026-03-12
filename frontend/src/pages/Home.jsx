@@ -6,8 +6,20 @@ import Testimonies from "../components/Testimonies";
 import "../pages/Home.css"
 import Pre_footer from "../components/Pre_footer";
 import Explainer from "../components/explainer";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 export default function Home(){
+    const location = useLocation();
+
+    useEffect(() => {
+        if (location.hash) {
+        const element = document.querySelector(location.hash);
+        if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+        }
+        }
+    }, [location]);
     return(
         <>
         <NavBar/>

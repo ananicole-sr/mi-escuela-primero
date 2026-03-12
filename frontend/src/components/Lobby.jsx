@@ -1,4 +1,5 @@
 import {useNavigate} from 'react-router-dom';
+import Explainer from './explainer';
 import school from '../assets/school_icon_32px.png';
 import heart from '../assets/love_icon_32px.png';
 import people from '../assets/people_icon_64px.png';
@@ -15,7 +16,7 @@ export default function Lobby(){
             </div>
             <div>
                 <button onClick={()=>navigate('/escuelas')}>Explorar Escuelas</button>
-                {/* <button onClick={()=>navigate('')}></button> */}
+                <button onClick={()=>navigate('/#explainer')}>¿Comó empiezo?</button>
             </div>
             <div>
                 <div class="caracteristicas">
