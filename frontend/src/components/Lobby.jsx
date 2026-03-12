@@ -16,7 +16,7 @@ export default function Lobby(){
             </div>
             <div>
                 <button onClick={()=>navigate('/escuelas')}>Explorar Escuelas</button>
-                <button onClick={()=>navigate('/#explainer')}>¿Comó empiezo?</button>
+                <button onClick={()=>navigate('/#explainer')}>Como funciona</button>
             </div>
             <div>
                 <div class="caracteristicas">
