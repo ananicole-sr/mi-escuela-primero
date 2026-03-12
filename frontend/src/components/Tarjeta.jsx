@@ -19,7 +19,6 @@ export default function Tarjeta( {escuela}) {
                         </span>
                     </address>
                     {/* <p>{escuela.municipio} - {escuela.nivelEducativo}</p> */}
-
                     <button onClick={manejarClick}> Ver Detalles </button>
                     <small>Actualizado: 11 de marzo de 2026</small>
                 </div>
