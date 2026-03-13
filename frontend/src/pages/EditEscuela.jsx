@@ -5,73 +5,125 @@ import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 
 export default function EditarEscuela() {
+
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const token = localStorage.getItem("token");
+
   const [escuela, setEscuela] = useState({
-    nombre: "", plantel: "", municipio: "", direccion: "", cct: "",
-    personal_escolar: "", estudiantes: "", nivelEducativo: "",
-    modalidad: "", turno: "", sostenimiento: "",categoria:""
+    nombre: "",
+    plantel: "",
+    municipio: "",
+    direccion: "",
+    cct: "",
+    personal_escolar: "",
+    estudiantes: "",
+    nivelEducativo: "",
+    modalidad: "",
+    turno: "",
+    sostenimiento: "",
+    categoria: ""
   });
 
-  const [loading, setLoading] = useState(true); //
+  const [loading, setLoading] = useState(true);
 
- 
+  // proteger ruta (solo admin)
   useEffect(() => {
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Debes iniciar sesión como administrador");
+      navigate("/login");
+    }
+
+  }, []);
+
+
+
+  // cargar datos
+  useEffect(() => {
+
     async function cargarDatos() {
+
       try {
+
         const res = await getEscuelaById(id);
-        setEscuela(res.data); // Llenamos el formulario con datos reales
+
+        setEscuela(res.data);
+
       } catch (e) {
+
         console.error("Error al obtener la escuela", e);
+
       } finally {
-        setLoading(false); // Ya terminó, mostramos el form
+
+        setLoading(false);
+
       }
     }
+
     cargarDatos();
+
   }, [id]);
 
   function handleChange(e) {
+
     setEscuela({
       ...escuela,
       [e.target.name]: e.target.value
     });
+
   }
 
   async function handleSubmit(e) {
+
     e.preventDefault();
+
     try {
-      /*const token = localStorage.getItem("token");*/
-      await updateEscuela(id, escuela/*, token*/);
+
+      await updateEscuela(id, escuela);
+
       alert("Escuela actualizada correctamente");
+
       navigate(`/escuelas/${id}`);
+
     } catch (err) {
+
       alert("Error al actualizar");
+
     }
   }
 
   async function handleDelete() {
-  const confirmar = window.confirm("¿Seguro que quieres eliminar esta escuela?");
-  
-  if (!confirmar) return;
 
-  try {
-    await deleteEscuela(id);
-    alert("Escuela eliminada correctamente");
-    navigate("/escuelas");
-  } catch (error) {
-    console.error(error);
-    alert("Error al eliminar la escuela");
+    const confirmar = window.confirm("¿Seguro que quieres eliminar esta escuela?");
+
+    if (!confirmar) return;
+
+    try {
+
+      await deleteEscuela(id);
+
+      alert("Escuela eliminada correctamente");
+
+      navigate("/escuelas");
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert("Error al eliminar la escuela");
+
+    }
   }
-}
-
 
   if (loading) return <p>Cargando datos de la escuela...</p>;
 
   return (
     <div>
 
-      <NavBar/>
+      <NavBar />
 
       <div className="editContainer">
 
@@ -159,18 +211,21 @@ export default function EditarEscuela() {
           <button type="submit">
             Guardar cambios
           </button>
-        
-          <button type="button"
-            onClick={handleDelete}
-          >
-            Eliminar escuela
-          </button>
+
+          {token && (
+            <button
+              type="button"
+              onClick={handleDelete}
+            >
+              Eliminar escuela
+            </button>
+          )}
 
         </form>
 
       </div>
 
-      <Footer/>
+      <Footer />
 
     </div>
   );

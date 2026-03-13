@@ -1,50 +1,55 @@
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { login } from "../services/api";
 
 export default function LoginForm() {
-    const [usuario, setUsuario] = useState("");
-    const [contraseña, setContraseña] = useState("");
 
-    const navigate = useNavigate();
-    let authToken = null;
+  const [usuario, setUsuario] = useState("");
+  const [contraseña, setContraseña] = useState("");
+  const navigate = useNavigate();
 
-    async function handleSubmit(e){
-        e.preventDefault()
-        try {
-            const res = await login({usuario: usuario, contraseña: contraseña });
-            authToken = res.data.token;
-            /*authToken = res.token; guardo el token que se gener*, así no ya que por axios el formato es data y adentro viene token*/
-            localStorage.setItem("token",authToken);
-            console.log(res.data);
-            navigate("/escuelas"); 
+  async function handleSubmit(e) {
+    e.preventDefault();
 
-        } catch {
-            alert("The credentials are incorrect ")
-        }
+    try {
+
+      const res = await login({
+        usuario,
+        contraseña
+      });
+
+      localStorage.setItem("token", res.data.token);
+
+      alert("Login exitoso");
+
+      navigate("/escuelas");
+
+    } catch (error) {
+      alert("Credenciales incorrectas");
     }
-    
-return (
-        <form onSubmit={handleSubmit}> 
-            <label htmlFor="user"> Usuario </label>
-            <input 
-                id="user"
-                name="user" 
-                type="text" 
-                value={usuario} 
-                onChange={(e) => setUsuario(e.target.value)}
-            />
+  }
 
-            <label htmlFor="contra"> Contraseña </label>
-            <input 
-                id="contra"
-                name="contra" 
-                type="password" 
-                value={contraseña} 
-                onChange={(e) => setContraseña(e.target.value)}
-            />
+  return (
+    <form onSubmit={handleSubmit}>
 
-            <button type="submit"> Login </button>
-        </form>
-    );
+      <input
+        type="text"
+        placeholder="Usuario"
+        value={usuario}
+        onChange={(e) => setUsuario(e.target.value)}
+      />
+
+      <input
+        type="password"
+        placeholder="Contraseña"
+        value={contraseña}
+        onChange={(e) => setContraseña(e.target.value)}
+      />
+
+      <button type="submit">
+        Iniciar sesión
+      </button>
+
+    </form>
+  );
 }

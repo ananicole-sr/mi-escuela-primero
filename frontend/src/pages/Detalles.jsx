@@ -8,6 +8,7 @@ import PopUp from "../components/PopUp";
 import locationIcon from "../assets/location_icon.png";
 import calendarIcon from "../assets/calendar_icon.png";
 import schoolIcon from "../assets/school_icon_32px.png";
+const token = localStorage.getItem("token");
 
 export default function Detalles() {
     const [escuela, setEscuela] = useState(null);
@@ -80,12 +81,14 @@ export default function Detalles() {
                         <span className="text-lg">←</span>
                         <span>Volver al Catálogo</span>
                     </button>
+                    {token && (
                     <button
                         onClick={goToEdit}
                         className="ml-3 inline-flex w-fit items-center gap-3 rounded-2xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
                     >
                         Editar Escuela
                     </button>
+                    )}
 
                     <section className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_420px] xl:items-start">
                         <div className="rounded-[32px] border border-slate-200 bg-white p-7 shadow-sm md:p-9">
