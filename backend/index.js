@@ -270,251 +270,8 @@ const escuelas = [
     sostenimiento: "Federal",
     categoria: ["infraestructura","material"]
   }
-]
+];
 
-const propuestas = [
-
-{
-id_propuesta: 1,
-id_escuela: 1,
-categoria: "infraestructura",
-subcategoria: "Contruccion materiales",
-titulo: "Cubetas de pintura",
-descripcion: "",
-estado: "cubierto"
-},
-
-{
-id_propuesta: 2,
-id_escuela: 1,
-categoria: "material",
-subcategoria: "Pizarrones/Pintarrones",
-titulo: "Pizarrones",
-descripcion: "",
-estado: "cubierto"
-},
-
-{
-id_propuesta: 3,
-id_escuela: 2,
-categoria: "Salud",
-subcategoria: "Salud fisica",
-titulo: "Botiquien",
-descripcion: "",
-estado: "pendiente"
-},
-
-{
-id_propuesta: 4,
-id_escuela: 2,
-categoria: "Formacion",
-subcategoria: "Formacion para estudiantes",
-titulo: "Estudiantes: manejo de emociones",
-descripcion: "ormación para un grupo de estudiantes de secundaria (aprox. 25 alumnos)",
-estado: "cubierto"
-},
-
-{
-id_propuesta: 5,
-id_escuela: 3,
-categoria: "Formacion",
-subcategoria: "Formación para estudiantes",
-titulo: "Estudiantes: desarrollo de valores",
-descripcion: "Instalación de estaciones de lavado de manos",
-estado: "pendiente"
-},
-
-{
-id_propuesta: 6,
-id_escuela: 3,
-categoria: "Salud",
-subcategoria: "Salud material",
-titulo: "Silla de ruedas/andadera",
-descripcion: "Sustitución de pupitres dañados",
-estado: "cubierto"
-},
-
-{
-id_propuesta: 7,
-id_escuela: 4,
-categoria: "Material",
-subcategoria: "Material tecnologico",
-titulo: "Proyectores",
-descripcion: "",
-estado: "pendiente"
-},
-
-{
-id_propuesta: 8,
-id_escuela: 4,
-categoria: "Formacion",
-subcategoria: "Formación para estudiantes",
-titulo: "Estudiantes: Convivencia escolar y valores",
-descripcion: "",
-estado: "cubierto"
-},
-
-{
-id_propuesta: 9,
-id_escuela: 5,
-categoria: "Formacion",
-subcategoria: "Formación para familias",
-titulo: "Prevención de abuso sexual",
-descripcion: "",
-estado: "cubierto"
-},
-
-{
-id_propuesta: 10,
-id_escuela: 5,
-categoria: "Material",
-subcategoria: "Material didáctico",
-titulo: "Material estudiantes: proyecto de vida (alebrijes)",
-descripcion: "",
-estado: "cubierto"
-},
-
-{
-id_propuesta: 11,
-id_escuela: 6,
-categoria: "Formacion",
-subcategoria: "Formación para docentes",
-titulo: "Docentes: proyecto de vida",
-descripcion: "",
-estado: "cubierto"
-},
-
-{
-id_propuesta: 12,
-id_escuela: 6,
-categoria: "Material",
-subcategoria: "Mobiliario",
-titulo: "Comedores",
-descripcion: "",
-estado: "pendiente"
-},
-
-{
-id_propuesta: 13,
-id_escuela: 7,
-categoria: "Material",
-subcategoria: "Material literario",
-titulo: "Libros infantil",
-descripcion: "",
-estado: "cubierto"
-},
-
-{
-id_propuesta: 14,
-id_escuela: 7,
-categoria: "Infraestructura",
-subcategoria: "Construcción materiales",
-titulo: "Montenes de fierro (vigas) de 5 pulgadas calibre 14",
-descripcion: "",
-estado: "cubierto"
-},
-
-{
-id_propuesta: 15,
-id_escuela: 8,
-categoria: "Infraestructura",
-subcategoria: "Construcción materiales",
-titulo: "Cubetas de pintura",
-descripcion: "",
-estado: "cubierto"
-},
-
-{
-id_propuesta: 16,
-id_escuela: 8,
-categoria: "Material",
-subcategoria: "Material tecnológico",
-titulo: "Proyectores",
-descripcion: "",
-estado: "Pendiente"
-},
-
-{
-id_propuesta: 17,
-id_escuela: 9,
-categoria: "Salud",
-subcategoria: "Salud física",
-titulo: "Jornadas de salud física",
-descripcion: "",
-estado: "Cubierto"
-},
-
-{
-id_propuesta: 18,
-id_escuela: 9,
-categoria: "Formación",
-subcategoria: "Formación para estudiantes",
-titulo: "Estudiantes S: Prevención de violencia",
-descripcion: "",
-estado: "Pendiente"
-},
-
-{
-id_propuesta: 19,
-id_escuela: 10,
-categoria: "Infrestructura",
-subcategoria: "Salud física",
-titulo: "Filtros de agua (quizás)",
-descripcion: "",
-estado: "Cubierto"
-},
-
-{
-id_propuesta: 20,
-id_escuela: 10,
-categoria: "Material",
-subcategoria: "Transporte",
-titulo: "Bicicletas",
-descripcion: "",
-estado: "Cubierto"
-},
-
-{
-id_propuesta: 21,
-id_escuela: 11,
-categoria: "Salud",
-subcategoria: "Salud física",
-titulo: "Jornadas de salud física",
-descripcion: "",
-estado: "Cubierto"
-},
-
-{
-id_propuesta: 22,
-id_escuela: 11,
-categoria: "Material",
-subcategoria: "Material de educación física",
-titulo: "Pelotas",
-descripcion: "",
-estado: "Pendientes"
-},
-
-{
-id_propuesta: 23,
-id_escuela: 12,
-categoria: "Material",
-subcategoria: "Material didáctico",
-titulo: "Juegos de mesa",
-descripcion: "",
-estado: "Pendiente"
-},
-
-{
-id_propuesta: 24,
-id_escuela: 12,
-categoria: "Infraestructura",
-subcategoria: "Construcción servicio",
-titulo: "Arreglo de barda con alambrado caído",
-descripcion: "",
-estado: "Pendientes"
-}
-
-]
 
 const express = require('express');
 const cors = require('cors');
@@ -567,23 +324,126 @@ app.post('/api/login', (req, res) => {
   const usuarioEncontrado = usuariosDB.find((u) => {
     return u.usuario === usuario && u.password === contraseña;  });
   if (usuarioEncontrado) {
+    const token = jwt.sign(
+    { usuario: usuarioEncontrado.usuario }, 
+    SECRET_KEY,
+    { expiresIn: "10m" });
     res.status(200).json({ mensaje: "Login OK" });
   } else {
     res.status(401).json({ mensaje: "Error" });
   }
-  const token = jwt.sign(
-    { usuario: usuarioEncontrado.usuario }, // payload
-    SECRET_KEY,
-    { expiresIn: "10m" }
-  );
-  res.json({ token });
+  
 
 });
 
 
-app.get('/api/home', (req, res) => {
-  
-})
+app.put('/api/escuelas/:id', (req, res) => {
+
+  const idBuscado = parseInt(req.params.id);
+
+  const escuelaIndex = escuelas.findIndex(
+    e => e.id_escuela === idBuscado
+  );
+
+  if (escuelaIndex === -1) {
+    return res.status(404).json({ mensaje: "Escuela no encontrada" });
+  }
+
+  const {
+    nombre,
+    plantel,
+    municipio,
+    direccion,
+    ubicacion,
+    cct,
+    personal_escolar,
+    estudiantes,
+    nivelEducativo,
+    modalidad,
+    turno,
+    sostenimiento,
+    categoria
+  } = req.body;
+
+  escuelas[escuelaIndex] = {
+    ...escuelas[escuelaIndex],
+    nombre: nombre || escuelas[escuelaIndex].nombre,
+    plantel: plantel || escuelas[escuelaIndex].plantel,
+    municipio: municipio || escuelas[escuelaIndex].municipio,
+    direccion: direccion || escuelas[escuelaIndex].direccion,
+    ubicacion: ubicacion || escuelas[escuelaIndex].ubicacion,
+    cct: cct || escuelas[escuelaIndex].cct,
+    personal_escolar: personal_escolar || escuelas[escuelaIndex].personal_escolar,
+    estudiantes: estudiantes || escuelas[escuelaIndex].estudiantes,
+    nivelEducativo: nivelEducativo || escuelas[escuelaIndex].nivelEducativo,
+    modalidad: modalidad || escuelas[escuelaIndex].modalidad,
+    turno: turno || escuelas[escuelaIndex].turno,
+    sostenimiento: sostenimiento || escuelas[escuelaIndex].sostenimiento,
+    categoria: categoria || escuelas[escuelaIndex].categoria
+  };
+
+  res.json({
+    mensaje: "Escuela actualizada",
+    escuela: escuelas[escuelaIndex]
+  });
+
+});
+
+
+
+
+
+app.post('/api/escuelas', (req, res) => {
+  console.log("--- Petición recibida en POST /api/escuelas ---");
+  console.log("Cuerpo de la petición:", req.body); 
+
+  try {
+    const { nombre, plantel, municipio, direccion, ubicacion, cct, 
+      personal_escolar, estudiantes, nivelEducativo, modalidad, 
+      turno, sostenimiento, categoria } = req.body;
+
+    const nuevaEscuela = {
+      id_escuela: escuelas.length > 0 ? escuelas[escuelas.length - 1].id_escuela + 1 : 1, 
+      nombre,
+      plantel: plantel || "No especificado",
+      municipio: municipio || "No especificado",
+      direccion: direccion || "",
+      ubicacion: ubicacion || "",
+      cct: cct || "",
+      personal_escolar: parseInt(personal_escolar) || 0,
+      estudiantes: parseInt(estudiantes) || 0,
+      nivelEducativo: nivelEducativo || "",
+      modalidad: modalidad || "",
+      turno: turno || "",
+      sostenimiento: sostenimiento || "",
+      categoria: categoria || "General" 
+    };
+
+    escuelas.push(nuevaEscuela);
+
+    res.status(201).json({ 
+      mensaje: "Escuela registrada con éxito", 
+      escuela: nuevaEscuela 
+    });
+
+  } catch (error) {
+    res.status(500).json({ mensaje: "Error interno del servidor" });
+  }
+});
+
+app.delete('/api/escuelas/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const indice = escuelas.findIndex(e => e.id_escuela === id);
+  if (indice !== -1) {
+    const escuelaEliminada = escuelas.splice(indice, 1);
+    res.status(200).json({ 
+      mensaje: "Escuela eliminada con éxito",
+      id: id 
+    });
+  } else {
+    res.status(404).json({ mensaje: "Error: La escuela no existe en la base de datos." });
+  }
+});
 
 app.listen(PORT, () => {
     console.log(`Listening in Port: ${PORT}`)

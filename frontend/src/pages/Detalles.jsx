@@ -31,6 +31,9 @@ export default function Detalles() {
     function redirect() {
         navigate("/escuelas");
     }
+    function goToEdit() {
+        navigate(`/editar/${id}`);
+    }
 
     const [showPopup, setShowPopup] = useState(false);
     const [showContactPopup, setShowContactPopup] = useState(false);
@@ -86,6 +89,12 @@ export default function Detalles() {
                     >
                         <span className="text-lg">←</span>
                         <span>Volver al Catálogo</span>
+                    </button>
+                    <button
+                        onClick={goToEdit}
+                        className="ml-3 inline-flex w-fit items-center gap-3 rounded-2xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
+                    >
+                        Editar Escuela
                     </button>
 
                     <section className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_420px] xl:items-start">
