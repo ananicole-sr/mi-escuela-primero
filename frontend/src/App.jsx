@@ -7,7 +7,7 @@ import Catalogo from "./pages/Catalogo.jsx";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
 import AgregarEscuela from "./pages/AgregarEscuela.jsx";
-import EditEscuela from ".pages/EditEscuela.jsx";
+import EditEscuela from "./pages/EditEscuela.jsx";
 
 function App() {
   return (

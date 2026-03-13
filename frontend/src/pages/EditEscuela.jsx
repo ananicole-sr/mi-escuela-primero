@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getEscuelaById, updateEscuela } from "../services/api";
+import { getEscuelaById, updateEscuela, deleteEscuela } from "../services/api";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 
@@ -42,13 +42,28 @@ export default function EditarEscuela() {
     e.preventDefault();
     try {
       /*const token = localStorage.getItem("token");*/
-      await updateEscuela(id, escuela, token);
+      await updateEscuela(id, escuela/*, token*/);
       alert("Escuela actualizada correctamente");
-      navigate(`/detalles/${id}`);
+      navigate(`/escuelas/${id}`);
     } catch (err) {
       alert("Error al actualizar");
     }
   }
+
+  async function handleDelete() {
+  const confirmar = window.confirm("¿Seguro que quieres eliminar esta escuela?");
+  
+  if (!confirmar) return;
+
+  try {
+    await deleteEscuela(id);
+    alert("Escuela eliminada correctamente");
+    navigate("/escuelas");
+  } catch (error) {
+    console.error(error);
+    alert("Error al eliminar la escuela");
+  }
+}
 
 
   if (loading) return <p>Cargando datos de la escuela...</p>;
@@ -143,6 +158,12 @@ export default function EditarEscuela() {
 
           <button type="submit">
             Guardar cambios
+          </button>
+        
+          <button type="button"
+            onClick={handleDelete}
+          >
+            Eliminar escuela
           </button>
 
         </form>

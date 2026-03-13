@@ -23,6 +23,9 @@ export function updateEscuela(id, datos) {
     return api.put(`/escuelas/${id}`, datos)
 }
 
+export function deleteEscuela(id) {
+  return api.delete(`/escuelas/${id}`);
+}
 
 export default api;
 

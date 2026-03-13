@@ -5,7 +5,7 @@ import TrustBuilding from "../components/TrustBuilding";
 import Testimonies from "../components/Testimonies";
 import "../pages/Home.css"
 import Pre_footer from "../components/Pre_footer";
-import Explainer from "../components/explainer";
+import Explainer from "../components/Explainer";
 import MuestraCatalogo from "../components/MuestraCatalogo";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
