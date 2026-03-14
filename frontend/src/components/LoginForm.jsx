@@ -25,26 +25,55 @@ export default function LoginForm() {
     }
     
 return (
-        <form onSubmit={handleSubmit}> 
-            <label htmlFor="user"> Usuario </label>
-            <input 
-                id="user"
-                name="user" 
-                type="text" 
-                value={usuario} 
-                onChange={(e) => setUsuario(e.target.value)}
-            />
+        <div className="flex min-h-[70vh] items-center justify-center px-6 py-10">
+            <div className="w-full max-w-md rounded-[32px] border border-slate-200 bg-white p-8 shadow-[0_24px_60px_rgba(15,23,42,0.08)] md:p-10">
+                <div className="mb-8 text-center">
+                    <span className="inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-sm font-semibold text-emerald-700 shadow-sm">
+                        Acceso administrador
+                    </span>
+                    <h1 className="mt-4 text-3xl font-extrabold tracking-[-0.04em] text-slate-900">
+                        Iniciar sesión
+                    </h1>
+                    <p className="mt-2 text-sm leading-7 text-slate-600 md:text-base">
+                        Ingresa tus credenciales para acceder al panel.
+                    </p>
+                </div>
 
-            <label htmlFor="contra"> Contraseña </label>
-            <input 
-                id="contra"
-                name="contra" 
-                type="password" 
-                value={contraseña} 
-                onChange={(e) => setContraseña(e.target.value)}
-            />
+                <form onSubmit={handleSubmit} className="grid gap-5">
+                    <div className="grid gap-2 text-left">
+                        <label className="text-sm font-semibold text-slate-700" htmlFor="user">Usuario</label>
+                        <input
+                            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+                            id="user"
+                            name="user"
+                            type="text"
+                            placeholder="Ingresa tu usuario"
+                            value={usuario}
+                            onChange={(e) => setUsuario(e.target.value)}
+                        />
+                    </div>
 
-            <button type="submit"> Login </button>
-        </form>
+                    <div className="grid gap-2 text-left">
+                        <label className="text-sm font-semibold text-slate-700" htmlFor="contra">Contraseña</label>
+                        <input
+                            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+                            id="contra"
+                            name="contra"
+                            type="password"
+                            placeholder="Ingresa tu contraseña"
+                            value={contraseña}
+                            onChange={(e) => setContraseña(e.target.value)}
+                        />
+                    </div>
+
+                    <button
+                        className="mt-2 inline-flex w-full items-center justify-center rounded-2xl bg-emerald-700 px-6 py-3.5 text-sm font-semibold text-white shadow-md transition hover:bg-emerald-800"
+                        type="submit"
+                    >
+                        Iniciar sesión
+                    </button>
+                </form>
+            </div>
+        </div>
     );
 }

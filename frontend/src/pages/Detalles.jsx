@@ -83,19 +83,22 @@ export default function Detalles() {
 
             <main className="px-6 py-8 md:px-10 lg:px-14 lg:py-10">
                 <div className="mx-auto flex w-full max-w-[1360px] flex-col gap-10">
-                    <button
-                        onClick={redirect}
-                        className="inline-flex w-fit items-center gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-emerald-200 hover:text-emerald-700"
-                    >
-                        <span className="text-lg">←</span>
-                        <span>Volver al Catálogo</span>
-                    </button>
-                    <button
-                        onClick={goToEdit}
-                        className="ml-3 inline-flex w-fit items-center gap-3 rounded-2xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
-                    >
-                        Editar Escuela
-                    </button>
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <button
+                            onClick={redirect}
+                            className="inline-flex w-fit items-center gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-emerald-200 hover:text-emerald-700"
+                        >
+                            <span className="text-lg">←</span>
+                            <span>Volver al Catálogo</span>
+                        </button>
+
+                        <button
+                            onClick={goToEdit}
+                            className="inline-flex w-fit items-center justify-center rounded-2xl border border-amber-200 bg-amber-400 px-5 py-3 text-sm font-semibold text-amber-950 shadow-sm transition hover:bg-amber-500"
+                        >
+                            Editar Escuela
+                        </button>
+                    </div>
 
                     <section className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_420px] xl:items-start">
                         <div className="rounded-[32px] border border-slate-200 bg-white p-7 shadow-sm md:p-9">

@@ -65,7 +65,7 @@ export default function Footer() {
                 >
                   FAQ
                 </button>
-                <Link className="text-slate-300 hover:text-white" to="/admin">Administrador</Link>
+                <Link className="text-slate-300 hover:text-white" to="/login">Administrador</Link>
               </div>
             </section>
           </div>
