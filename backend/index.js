@@ -1,326 +1,392 @@
-require('dotenv').config();
-const express = require('express');
-const cors    = require('cors');
-const jwt     = require('jsonwebtoken');
-const multer  = require('multer');
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const jwt = require("jsonwebtoken");
+const multer = require("multer");
 
-const bcrypt       = require('bcryptjs');
-const initDatabase = require('./db/init');
-const queries      = require('./db/queries');
+const bcrypt = require("bcryptjs");
+const initDatabase = require("./db/init");
+const queries = require("./db/queries");
 
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 10 * 1024 * 1024 },
   fileFilter(_, file, cb) {
-    if (!file.mimetype.startsWith('image/')) {
-      return cb(new Error('Solo se permiten archivos de imagen'));
+    if (!file.mimetype.startsWith("image/")) {
+      return cb(new Error("Solo se permiten archivos de imagen"));
     }
     cb(null, true);
   },
 });
 
-const app        = express();
-const PORT       = process.env.PORT       || 3000;
-const SECRET_KEY = process.env.JWT_SECRET || 'pachandini';
+const app = express();
+const PORT = process.env.PORT || 3000;
+const SECRET_KEY = process.env.JWT_SECRET || "pachandini";
 
 const ALLOWED_ORIGINS = [
   "https://mi-escuela-primero-3175.up.railway.app",
   "http://localhost:5173",
   "http://localhost:4173",
 ];
-app.use(cors({
-  origin: (origin, cb) => {
-    if (!origin || ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
-    cb(new Error(`CORS: origin ${origin} not allowed`));
-  },
-}));
-app.use(express.json({ limit: '10mb' }));
-
+app.use(
+  cors({
+    origin: (origin, cb) => {
+      if (!origin || ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
+      cb(new Error(`CORS: origin ${origin} not allowed`));
+    },
+  }),
+);
+app.use(express.json({ limit: "10mb" }));
 
 function authenticateToken(req, res, next) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-  if (!token) return res.status(401).json({ mensaje: 'Token requerido' });
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  if (!token) return res.status(401).json({ mensaje: "Token requerido" });
   jwt.verify(token, SECRET_KEY, (err, user) => {
-    if (err) return res.status(403).json({ mensaje: 'Token inválido o expirado' });
+    if (err)
+      return res.status(403).json({ mensaje: "Token inválido o expirado" });
     req.user = user;
     next();
   });
 }
 
-
-app.post('/api/login', async (req, res) => {
+app.post("/api/login", async (req, res) => {
   try {
     const { correo, contraseña } = req.body;
     if (!correo || !contraseña) {
-      return res.status(400).json({ mensaje: 'Correo y contraseña son obligatorios' });
+      return res
+        .status(400)
+        .json({ mensaje: "Correo y contraseña son obligatorios" });
     }
     const admin = await queries.getAdminByCorreo(correo.trim().toLowerCase());
     if (!admin) {
-      return res.status(401).json({ mensaje: 'Credenciales incorrectas' });
+      return res.status(401).json({ mensaje: "Credenciales incorrectas" });
     }
     const match = await bcrypt.compare(contraseña, admin.password_hash);
     if (!match) {
-      return res.status(401).json({ mensaje: 'Credenciales incorrectas' });
+      return res.status(401).json({ mensaje: "Credenciales incorrectas" });
     }
-    const token = jwt.sign({ id_admin: admin.id_admin, correo: admin.correo }, SECRET_KEY, { expiresIn: '8h' });
-    res.json({ mensaje: 'Login OK', token });
+    const token = jwt.sign(
+      { id_admin: admin.id_admin, correo: admin.correo },
+      SECRET_KEY,
+      { expiresIn: "8h" },
+    );
+    res.json({ mensaje: "Login OK", token });
   } catch (err) {
-    console.error('POST /api/login:', err.message);
-    res.status(500).json({ mensaje: 'Error interno al iniciar sesión' });
+    console.error("POST /api/login:", err.message);
+    res.status(500).json({ mensaje: "Error interno al iniciar sesión" });
   }
 });
 
-
-app.get('/api/stats', async (req, res) => {
+app.get("/api/stats", async (req, res) => {
   try {
     const stats = await queries.getStats();
     res.json(stats);
   } catch (err) {
-    res.status(500).json({ mensaje: `Error al obtener estadísticas: ${err.message}` });
+    res
+      .status(500)
+      .json({ mensaje: `Error al obtener estadísticas: ${err.message}` });
   }
 });
 
-app.get('/api/escuelas', async (req, res) => {
+app.get("/api/escuelas", async (req, res) => {
   try {
     const escuelas = await queries.getAllEscuelas();
     res.json(escuelas);
   } catch (err) {
-    console.error('GET /api/escuelas:', err.message);
-    res.status(500).json({ mensaje: `Error al obtener escuelas: ${err.message}` });
+    console.error("GET /api/escuelas:", err.message);
+    res
+      .status(500)
+      .json({ mensaje: `Error al obtener escuelas: ${err.message}` });
   }
 });
 
-app.get('/api/escuelas/:id', async (req, res) => {
+app.get("/api/escuelas/:id", async (req, res) => {
   try {
     const escuela = await queries.getEscuelaById(parseInt(req.params.id));
-    if (!escuela) return res.status(404).json({ mensaje: 'Escuela no encontrada' });
+    if (!escuela)
+      return res.status(404).json({ mensaje: "Escuela no encontrada" });
     res.json(escuela);
   } catch (err) {
-    console.error('GET /api/escuelas/:id:', err.message);
-    res.status(500).json({ mensaje: `Error al obtener escuela: ${err.message}` });
+    console.error("GET /api/escuelas/:id:", err.message);
+    res
+      .status(500)
+      .json({ mensaje: `Error al obtener escuela: ${err.message}` });
   }
 });
 
-app.post('/api/escuelas', authenticateToken, async (req, res) => {
+app.post("/api/escuelas", authenticateToken, async (req, res) => {
   try {
-    const id    = await queries.createEscuela(req.body);
+    const id = await queries.createEscuela(req.body);
     const nueva = await queries.getEscuelaById(id);
-    res.status(201).json({ mensaje: 'Escuela registrada con éxito', escuela: nueva });
+    res
+      .status(201)
+      .json({ mensaje: "Escuela registrada con éxito", escuela: nueva });
   } catch (err) {
-    console.error('POST /api/escuelas:', err.message);
+    console.error("POST /api/escuelas:", err.message);
     res.status(500).json({ mensaje: `Error al crear escuela: ${err.message}` });
   }
 });
 
-app.put('/api/escuelas/:id', authenticateToken, async (req, res) => {
+app.put("/api/escuelas/:id", authenticateToken, async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const existe = await queries.getEscuelaById(id);
-    if (!existe) return res.status(404).json({ mensaje: 'Escuela no encontrada' });
+    if (!existe)
+      return res.status(404).json({ mensaje: "Escuela no encontrada" });
     await queries.updateEscuela(id, req.body);
     const actualizada = await queries.getEscuelaById(id);
-    res.json({ mensaje: 'Escuela actualizada', escuela: actualizada });
+    res.json({ mensaje: "Escuela actualizada", escuela: actualizada });
   } catch (err) {
-    console.error('PUT /api/escuelas/:id:', err.message);
-    res.status(500).json({ mensaje: `Error al actualizar escuela: ${err.message}` });
+    console.error("PUT /api/escuelas/:id:", err.message);
+    res
+      .status(500)
+      .json({ mensaje: `Error al actualizar escuela: ${err.message}` });
   }
 });
 
-app.delete('/api/escuelas/:id', authenticateToken, async (req, res) => {
+app.delete("/api/escuelas/:id", authenticateToken, async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const existe = await queries.getEscuelaById(id);
-    if (!existe) return res.status(404).json({ mensaje: 'Escuela no encontrada' });
+    if (!existe)
+      return res.status(404).json({ mensaje: "Escuela no encontrada" });
     await queries.deleteEscuela(id);
-    res.json({ mensaje: 'Escuela eliminada con éxito', id });
+    res.json({ mensaje: "Escuela eliminada con éxito", id });
   } catch (err) {
-    console.error('DELETE /api/escuelas/:id:', err.message);
-    res.status(500).json({ mensaje: `Error al eliminar escuela: ${err.message}` });
+    console.error("DELETE /api/escuelas/:id:", err.message);
+    res
+      .status(500)
+      .json({ mensaje: `Error al eliminar escuela: ${err.message}` });
   }
 });
 
-app.get('/api/fotos/:id', async (req, res) => {
+app.get("/api/fotos/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   console.log(`[foto ${id}] START`);
   try {
     const foto = await queries.getFotoById(id);
-    console.log(`[foto ${id}] queried: found=${!!foto}, hasData=${!!foto?.foto_data}, size=${foto?.foto_data?.length ?? 0}, mime=${foto?.foto_mime}`);
+    console.log(
+      `[foto ${id}] queried: found=${!!foto}, hasData=${!!foto?.foto_data}, size=${foto?.foto_data?.length ?? 0}, mime=${foto?.foto_mime}`,
+    );
 
-    if (!foto) return res.status(404).json({ mensaje: 'Foto no encontrada' });
-    if (!foto.foto_data) return res.status(410).json({ mensaje: 'Foto demasiado grande. Elimínala y vuelve a subirla.' });
+    if (!foto) return res.status(404).json({ mensaje: "Foto no encontrada" });
+    if (!foto.foto_data)
+      return res
+        .status(410)
+        .json({
+          mensaje: "Foto demasiado grande. Elimínala y vuelve a subirla.",
+        });
 
     const buf = Buffer.isBuffer(foto.foto_data)
       ? foto.foto_data
       : Buffer.from(foto.foto_data);
-    console.log(`[foto ${id}] buffer ready: isBuffer=${Buffer.isBuffer(buf)}, length=${buf.length}`);
+    console.log(
+      `[foto ${id}] buffer ready: isBuffer=${Buffer.isBuffer(buf)}, length=${buf.length}`,
+    );
 
     res.writeHead(200, {
-      'Content-Type': foto.foto_mime,
-      'Content-Length': buf.length,
-      'Cache-Control': 'no-store',
+      "Content-Type": foto.foto_mime,
+      "Content-Length": buf.length,
+      "Cache-Control": "no-store",
     });
     console.log(`[foto ${id}] headers sent, writing body...`);
     res.end(buf, () => console.log(`[foto ${id}] DONE`));
   } catch (err) {
     console.error(`[foto ${id}] ERROR: ${err.stack}`);
-    if (!res.headersSent) res.status(500).json({ mensaje: 'Error al obtener la foto' });
+    if (!res.headersSent)
+      res.status(500).json({ mensaje: "Error al obtener la foto" });
   }
 });
 
-app.post('/api/escuelas/:id/fotos', authenticateToken, upload.array('fotos', 10), async (req, res) => {
-  try {
-    const id_escuela = parseInt(req.params.id);
-    const existe = await queries.getEscuelaById(id_escuela);
-    if (!existe) return res.status(404).json({ mensaje: 'Escuela no encontrada' });
-    if (!req.files || req.files.length === 0) {
-      return res.status(400).json({ mensaje: 'No se recibió ningún archivo' });
+app.post(
+  "/api/escuelas/:id/fotos",
+  authenticateToken,
+  upload.array("fotos", 10),
+  async (req, res) => {
+    try {
+      const id_escuela = parseInt(req.params.id);
+      const existe = await queries.getEscuelaById(id_escuela);
+      if (!existe)
+        return res.status(404).json({ mensaje: "Escuela no encontrada" });
+      if (!req.files || req.files.length === 0) {
+        return res
+          .status(400)
+          .json({ mensaje: "No se recibió ningún archivo" });
+      }
+      const ids = [];
+      for (const file of req.files) {
+        const id = await queries.saveFoto(id_escuela, file);
+        ids.push(id);
+      }
+      res
+        .status(201)
+        .json({ mensaje: `${ids.length} foto(s) guardada(s)`, ids });
+    } catch (err) {
+      res
+        .status(500)
+        .json({ mensaje: "Error al guardar la foto", error: err.message });
     }
-    const ids = [];
-    for (const file of req.files) {
-      const id = await queries.saveFoto(id_escuela, file);
-      ids.push(id);
-    }
-    res.status(201).json({ mensaje: `${ids.length} foto(s) guardada(s)`, ids });
-  } catch (err) {
-    res.status(500).json({ mensaje: 'Error al guardar la foto', error: err.message });
-  }
-});
+  },
+);
 
-app.delete('/api/fotos/:id', authenticateToken, async (req, res) => {
+app.delete("/api/fotos/:id", authenticateToken, async (req, res) => {
   try {
     await queries.deleteFotoById(parseInt(req.params.id));
-    res.json({ mensaje: 'Foto eliminada' });
+    res.json({ mensaje: "Foto eliminada" });
   } catch (err) {
-    res.status(500).json({ mensaje: 'Error al eliminar la foto', error: err.message });
+    res
+      .status(500)
+      .json({ mensaje: "Error al eliminar la foto", error: err.message });
   }
 });
 
 // /escuela/:id must come before /:id to avoid Express matching "escuela" as the :id param.
-app.get('/api/necesidades', async (req, res) => {
+app.get("/api/necesidades", async (req, res) => {
   const necesidades = await queries.getAllPropuestas();
   res.json(necesidades);
 });
 
-app.get('/api/necesidades/escuela/:id_escuela', async (req, res) => {
+app.get("/api/necesidades/escuela/:id_escuela", async (req, res) => {
   const id = parseInt(req.params.id_escuela);
   const necesidades = await queries.getPropuestasByEscuela(id);
   res.json(necesidades);
 });
 
-app.post('/api/necesidades', authenticateToken, async (req, res) => {
+app.post("/api/necesidades", authenticateToken, async (req, res) => {
   const id = await queries.createPropuesta(req.body);
-  res.status(201).json({ mensaje: 'Necesidad creada', id_necesidad: id });
+  res.status(201).json({ mensaje: "Necesidad creada", id_necesidad: id });
 });
 
-app.put('/api/necesidades/:id', authenticateToken, async (req, res) => {
+app.put("/api/necesidades/:id", authenticateToken, async (req, res) => {
   await queries.updatePropuesta(parseInt(req.params.id), req.body);
-  res.json({ mensaje: 'Necesidad actualizada' });
+  res.json({ mensaje: "Necesidad actualizada" });
 });
 
-app.delete('/api/necesidades/:id', authenticateToken, async (req, res) => {
+app.delete("/api/necesidades/:id", authenticateToken, async (req, res) => {
   await queries.deletePropuesta(parseInt(req.params.id));
-  res.json({ mensaje: 'Necesidad eliminada' });
+  res.json({ mensaje: "Necesidad eliminada" });
 });
 
-app.post('/api/logout', authenticateToken, (req, res) => {
+app.post("/api/logout", authenticateToken, (req, res) => {
   // JWT is stateless; the client should discard the token.
   // This endpoint exists so logout is an explicit, documented action.
-  res.json({ mensaje: 'Sesión cerrada correctamente' });
+  res.json({ mensaje: "Sesión cerrada correctamente" });
 });
 
-app.get('/api/respuestas', authenticateToken, async (req, res) => {
+app.get("/api/respuestas", authenticateToken, async (req, res) => {
   const respuestas = await queries.getAllRespuestas();
   res.json(respuestas);
 });
 
-app.delete('/api/respuestas/:id', authenticateToken, async (req, res) => {
+app.delete("/api/respuestas/:id", authenticateToken, async (req, res) => {
   try {
     await queries.deleteRespuesta(parseInt(req.params.id));
-    res.json({ mensaje: 'Respuesta eliminada' });
+    res.json({ mensaje: "Respuesta eliminada" });
   } catch (err) {
-    console.error('DELETE /api/respuestas/:id:', err.message);
-    res.status(500).json({ mensaje: 'Error al eliminar la respuesta' });
+    console.error("DELETE /api/respuestas/:id:", err.message);
+    res.status(500).json({ mensaje: "Error al eliminar la respuesta" });
   }
 });
 
-app.post('/api/respuestas', async (req, res) => {
+app.post("/api/respuestas", async (req, res) => {
   const body = req.body ?? {};
-  const isBlank = (value) => typeof value !== 'string' || value.trim() === '';
+  const isBlank = (value) => typeof value !== "string" || value.trim() === "";
   const formType = body.form_type;
   const hasDonationDetails = !isBlank(body.tipo_apoyo || body.tipo_donacion);
-  const hasContactDetails = !isBlank(body.instancia_donante) || !isBlank(body.municipio_donante) || !isBlank(body.empresa);
+  const hasContactDetails =
+    !isBlank(body.instancia_donante) ||
+    !isBlank(body.municipio_donante) ||
+    !isBlank(body.empresa);
 
   if (isBlank(body.nombre) || isBlank(body.correo) || isBlank(body.telefono)) {
     return res.status(400).json({
-      mensaje: 'Nombre, correo y teléfono son obligatorios',
+      mensaje: "Nombre, correo y teléfono son obligatorios",
     });
   }
 
-  if (formType === 'donacion' || hasDonationDetails) {
+  if (formType === "donacion" || hasDonationDetails) {
     if (isBlank(body.tipo_apoyo || body.tipo_donacion)) {
       return res.status(400).json({
-        mensaje: 'El tipo de donativo o apoyo es obligatorio',
+        mensaje: "El tipo de donativo o apoyo es obligatorio",
       });
     }
-  } else if (formType === 'contacto' || hasContactDetails) {
-    if (isBlank(body.instancia_donante) || isBlank(body.municipio_donante) || isBlank(body.empresa)) {
+  } else if (formType === "contacto" || hasContactDetails) {
+    if (
+      isBlank(body.instancia_donante) ||
+      isBlank(body.municipio_donante) ||
+      isBlank(body.empresa)
+    ) {
       return res.status(400).json({
-        mensaje: 'Instancia, nombre de la instancia y municipio son obligatorios',
+        mensaje:
+          "Instancia, nombre de la instancia y municipio son obligatorios",
       });
     }
   } else {
     return res.status(400).json({
-      mensaje: 'No se recibieron datos válidos del formulario',
+      mensaje: "No se recibieron datos válidos del formulario",
     });
   }
 
   const id = await queries.createRespuesta(req.body);
-  res.status(201).json({ mensaje: 'Respuesta registrada', id });
+  res.status(201).json({ mensaje: "Respuesta registrada", id });
 });
 
-app.post('/api/importar/escuelas', authenticateToken, async (req, res) => {
+app.post("/api/importar/escuelas", authenticateToken, async (req, res) => {
   try {
     const { escuelas } = req.body;
     if (!Array.isArray(escuelas) || !escuelas.length) {
-      return res.status(400).json({ mensaje: 'No se recibieron datos válidos' });
+      return res
+        .status(400)
+        .json({ mensaje: "No se recibieron datos válidos" });
     }
     const result = await queries.importarEscuelas(escuelas);
-    res.json({ mensaje: `${result.insertadas} escuela(s) importada(s)`, ...result });
+    res.json({
+      mensaje: `${result.insertadas} escuela(s) importada(s)`,
+      ...result,
+    });
   } catch (err) {
-    console.error('POST /api/importar/escuelas:', err.message);
-    res.status(500).json({ mensaje: `Error al importar escuelas: ${err.message}` });
+    console.error("POST /api/importar/escuelas:", err.message);
+    res
+      .status(500)
+      .json({ mensaje: `Error al importar escuelas: ${err.message}` });
   }
 });
 
-app.post('/api/importar/necesidades', authenticateToken, async (req, res) => {
+app.post("/api/importar/necesidades", authenticateToken, async (req, res) => {
   try {
     const { necesidades } = req.body;
     if (!Array.isArray(necesidades) || !necesidades.length) {
-      return res.status(400).json({ mensaje: 'No se recibieron datos válidos' });
+      return res
+        .status(400)
+        .json({ mensaje: "No se recibieron datos válidos" });
     }
     const result = await queries.importarPropuestas(necesidades);
-    res.json({ mensaje: `${result.insertadas} necesidad(es) importada(s)`, ...result });
+    res.json({
+      mensaje: `${result.insertadas} necesidad(es) importada(s)`,
+      ...result,
+    });
   } catch (err) {
-    console.error('POST /api/importar/necesidades:', err.message);
-    res.status(500).json({ mensaje: `Error al importar necesidades: ${err.message}` });
+    console.error("POST /api/importar/necesidades:", err.message);
+    res
+      .status(500)
+      .json({ mensaje: `Error al importar necesidades: ${err.message}` });
   }
 });
 
-
 const dbConfig = {
-  host:     process.env.DB_HOST     || 'localhost',
-  user:     process.env.DB_USER     || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME     || 'mi_escuela_primero',
-  port:     parseInt(process.env.DB_PORT) || 3306,
+  host: process.env.DB_HOST || "localhost",
+  user: process.env.DB_USER || "root",
+  password: process.env.DB_PASSWORD || "",
+  database: process.env.DB_NAME || "mi_escuela_primero",
+  port: parseInt(process.env.DB_PORT) || 3306,
 };
 
 initDatabase(dbConfig)
   .then(() => {
     app.listen(PORT, () => console.log(`Listening on Port: ${PORT}`));
   })
-  .catch(err => {
-    console.error('Failed to initialize database:', err.message);
+  .catch((err) => {
+    console.error("Failed to initialize database:", err.message);
     process.exit(1);
   });
