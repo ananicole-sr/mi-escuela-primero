@@ -177,51 +177,56 @@ function formatRespuesta(row) {
   };
 }
 
-const ESCUELA_SELECT = `
-  SELECT
-    e.id_escuela,
-    e.nombre,
-    e.plantel,
-    e.direccion,
-    e.ubicacion,
-    e.cct,
-    e.personal_escolar,
-    e.estudiantes,
-    m.nombre_municipio        AS municipio,
-    mo.nombre_modalidad       AS modalidad,
-    t.nombre_turno            AS turno,
-    s.nombre_sostenimiento    AS sostenimiento,
-    GROUP_CONCAT(
-      DISTINCT ne.nombre_nivelEducativo
-      ORDER BY ne.nombre_nivelEducativo
-      SEPARATOR ','
-    ) AS nivelEducativo,
-    (
-      SELECT GROUP_CONCAT(DISTINCT c2.nombre_categoria SEPARATOR ',')
-      FROM   Propuesta p2
-      JOIN   Subcategoria sc2 ON p2.id_subcategoria = sc2.id_subcategoria
-      JOIN   Categoria    c2  ON sc2.id_categoria   = c2.id_categoria
-      WHERE  p2.id_escuela = e.id_escuela
-    ) AS categoria
-  FROM Escuela e
-  LEFT JOIN Municipio          m  ON e.id_municipio    = m.id_municipio
-  LEFT JOIN Modalidad          mo ON e.id_modalidad    = mo.id_modalidad
-  LEFT JOIN Turno              t  ON e.id_turno        = t.id_turno
-  LEFT JOIN Sostenimiento      s  ON e.id_sostenimiento = s.id_sostenimiento
-  LEFT JOIN Escuela_NivelEducativo ene ON e.id_escuela = ene.id_escuela
-  LEFT JOIN NivelEducativo     ne ON ene.id_nivelEducativo = ne.id_nivelEducativo
-`;
+// const ESCUELA_SELECT = `
+//   SELECT
+//     e.id_escuela,
+//     e.nombre,
+//     e.plantel,
+//     e.direccion,
+//     e.ubicacion,
+//     e.cct,
+//     e.personal_escolar,
+//     e.estudiantes,
+//     m.nombre_municipio        AS municipio,
+//     mo.nombre_modalidad       AS modalidad,
+//     t.nombre_turno            AS turno,
+//     s.nombre_sostenimiento    AS sostenimiento,
+//     GROUP_CONCAT(
+//       DISTINCT ne.nombre_nivelEducativo
+//       ORDER BY ne.nombre_nivelEducativo
+//       SEPARATOR ','
+//     ) AS nivelEducativo,
+//     (
+//       SELECT GROUP_CONCAT(DISTINCT c2.nombre_categoria SEPARATOR ',')
+//       FROM   Propuesta p2
+//       JOIN   Subcategoria sc2 ON p2.id_subcategoria = sc2.id_subcategoria
+//       JOIN   Categoria    c2  ON sc2.id_categoria   = c2.id_categoria
+//       WHERE  p2.id_escuela = e.id_escuela
+//     ) AS categoria
+//   FROM Escuela e
+//   LEFT JOIN Municipio          m  ON e.id_municipio    = m.id_municipio
+//   LEFT JOIN Modalidad          mo ON e.id_modalidad    = mo.id_modalidad
+//   LEFT JOIN Turno              t  ON e.id_turno        = t.id_turno
+//   LEFT JOIN Sostenimiento      s  ON e.id_sostenimiento = s.id_sostenimiento
+//   LEFT JOIN Escuela_NivelEducativo ene ON e.id_escuela = ene.id_escuela
+//   LEFT JOIN NivelEducativo     ne ON ene.id_nivelEducativo = ne.id_nivelEducativo
+// `;
+
+const ESCUELA_SELECT = `SELECT * FROM vista_escuelas`;
 
 async function getAllEscuelas() {
   const [rows] = await pool.query(
-    ESCUELA_SELECT + ' GROUP BY e.id_escuela ORDER BY e.id_escuela'
+    // ESCUELA_SELECT + ' GROUP BY e.id_escuela ORDER BY e.id_escuela'
+    ESCUELA_SELECT + ' ORDER BY id_escuela'
   );
   return attachFotos(rows.map(formatEscuela));
 }
 
 async function getEscuelaById(id) {
   const [rows] = await pool.query(
-    ESCUELA_SELECT + ' WHERE e.id_escuela = ? GROUP BY e.id_escuela',
+    // ESCUELA_SELECT + ' WHERE e.id_escuela = ? GROUP BY e.id_escuela',
+    // [id]
+    ESCUELA_SELECT + ' WHERE id_escuela = ?',
     [id]
   );
   if (!rows.length) return null;
@@ -309,38 +314,43 @@ async function deleteEscuela(id) {
   await pool.query('DELETE FROM Escuela WHERE id_escuela = ?', [id]);
 }
 
-const PROPUESTA_SELECT = `
-  SELECT
-    p.id_propuesta         AS id_necesidad,
-    p.id_escuela,
-    e.nombre               AS nombre_escuela,
-    m.nombre_municipio     AS municipio,
-    p.propuesta,
-    p.detalles,
-    p.cantidad,
-    c.nombre_categoria     AS categoria,
-    sc.nombre_subcategoria AS subcategoria,
-    ep.nombre_estado       AS estado,
-    u.nombre_unidad        AS unidad
-  FROM Propuesta p
-  LEFT JOIN Escuela        e  ON p.id_escuela          = e.id_escuela
-  LEFT JOIN Municipio      m  ON e.id_municipio         = m.id_municipio
-  LEFT JOIN Subcategoria   sc ON p.id_subcategoria     = sc.id_subcategoria
-  LEFT JOIN Categoria       c ON sc.id_categoria       = c.id_categoria
-  LEFT JOIN EstadoPropuesta ep ON p.id_estadoPropuesta = ep.id_estadoPropuesta
-  LEFT JOIN Unidad           u ON p.id_unidad           = u.id_unidad
-`;
+// const PROPUESTA_SELECT = `
+//   SELECT
+//     p.id_propuesta         AS id_necesidad,
+//     p.id_escuela,
+//     e.nombre               AS nombre_escuela,
+//     m.nombre_municipio     AS municipio,
+//     p.propuesta,
+//     p.detalles,
+//     p.cantidad,
+//     c.nombre_categoria     AS categoria,
+//     sc.nombre_subcategoria AS subcategoria,
+//     ep.nombre_estado       AS estado,
+//     u.nombre_unidad        AS unidad
+//   FROM Propuesta p
+//   LEFT JOIN Escuela        e  ON p.id_escuela          = e.id_escuela
+//   LEFT JOIN Municipio      m  ON e.id_municipio         = m.id_municipio
+//   LEFT JOIN Subcategoria   sc ON p.id_subcategoria     = sc.id_subcategoria
+//   LEFT JOIN Categoria       c ON sc.id_categoria       = c.id_categoria
+//   LEFT JOIN EstadoPropuesta ep ON p.id_estadoPropuesta = ep.id_estadoPropuesta
+//   LEFT JOIN Unidad           u ON p.id_unidad           = u.id_unidad
+// `;
+const PROPUESTA_SELECT = `SELECT * FROM vista_propuestas`;
+
 
 async function getAllPropuestas() {
   const [rows] = await pool.query(
-    PROPUESTA_SELECT + ' ORDER BY p.id_escuela, p.id_propuesta'
+    // PROPUESTA_SELECT + ' ORDER BY p.id_escuela, p.id_propuesta'
+    PROPUESTA_SELECT + ' ORDER BY id_escuela, id_necesidad'
   );
   return rows.map(formatPropuesta);
 }
 
 async function getPropuestasByEscuela(id_escuela) {
   const [rows] = await pool.query(
-    PROPUESTA_SELECT + ' WHERE p.id_escuela = ? ORDER BY p.id_propuesta',
+    // PROPUESTA_SELECT + ' WHERE p.id_escuela = ? ORDER BY p.id_propuesta',
+    // [id_escuela]
+    PROPUESTA_SELECT + ' WHERE id_escuela = ? ORDER BY id_necesidad',
     [id_escuela]
   );
   return rows.map(formatPropuesta);

@@ -176,6 +176,70 @@ async function initDatabase(config){
             );
         `);
 
+
+        await connection.query(`
+            CREATE OR REPLACE VIEW vista_escuelas AS
+            SELECT
+            e.id_escuela,
+            e.nombre,
+            e.plantel,
+            e.direccion,
+            e.ubicacion,
+            e.cct,
+            e.personal_escolar,
+            e.estudiantes,
+            m.nombre_municipio     AS municipio,
+            mo.nombre_modalidad    AS modalidad,
+            t.nombre_turno         AS turno,
+            s.nombre_sostenimiento AS sostenimiento,
+            GROUP_CONCAT(
+                DISTINCT ne.nombre_nivelEducativo
+                ORDER BY ne.nombre_nivelEducativo
+                SEPARATOR ','
+            ) AS nivelEducativo,
+            (
+                SELECT GROUP_CONCAT(DISTINCT c2.nombre_categoria SEPARATOR ',')
+                FROM   Propuesta p2
+                JOIN   Subcategoria sc2 ON p2.id_subcategoria = sc2.id_subcategoria
+                JOIN   Categoria    c2  ON sc2.id_categoria   = c2.id_categoria
+                WHERE  p2.id_escuela = e.id_escuela
+            ) AS categoria
+            FROM Escuela e
+            LEFT JOIN Municipio              m   ON e.id_municipio      = m.id_municipio
+            LEFT JOIN Modalidad              mo  ON e.id_modalidad      = mo.id_modalidad
+            LEFT JOIN Turno                  t   ON e.id_turno          = t.id_turno
+            LEFT JOIN Sostenimiento          s   ON e.id_sostenimiento  = s.id_sostenimiento
+            LEFT JOIN Escuela_NivelEducativo ene ON e.id_escuela        = ene.id_escuela
+            LEFT JOIN NivelEducativo         ne  ON ene.id_nivelEducativo = ne.id_nivelEducativo
+            GROUP BY
+            e.id_escuela, e.nombre, e.plantel, e.direccion, e.ubicacion,
+            e.cct, e.personal_escolar, e.estudiantes,
+            m.nombre_municipio, mo.nombre_modalidad, t.nombre_turno, s.nombre_sostenimiento;
+        `);
+
+        await connection.query(`
+            CREATE OR REPLACE VIEW vista_propuestas AS
+            SELECT
+            p.id_propuesta         AS id_necesidad,
+            p.id_escuela,
+            e.nombre               AS nombre_escuela,
+            m.nombre_municipio     AS municipio,
+            p.propuesta,
+            p.detalles,
+            p.cantidad,
+            c.nombre_categoria     AS categoria,
+            sc.nombre_subcategoria AS subcategoria,
+            ep.nombre_estado       AS estado,
+            u.nombre_unidad        AS unidad
+            FROM Propuesta p
+            LEFT JOIN Escuela        e  ON p.id_escuela          = e.id_escuela
+            LEFT JOIN Municipio      m  ON e.id_municipio         = m.id_municipio
+            LEFT JOIN Subcategoria   sc ON p.id_subcategoria     = sc.id_subcategoria
+            LEFT JOIN Categoria      c  ON sc.id_categoria       = c.id_categoria
+            LEFT JOIN EstadoPropuesta ep ON p.id_estadoPropuesta = ep.id_estadoPropuesta
+            LEFT JOIN Unidad         u  ON p.id_unidad           = u.id_unidad;
+        `);
+
         const [existingCols] = await connection.query(`
             SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
             WHERE TABLE_SCHEMA = DATABASE()
