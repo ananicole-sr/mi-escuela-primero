@@ -1,38 +1,40 @@
 const mysql = require("mysql2/promise");
 
-async function initDatabase(config){
-    const connection = await mysql.createConnection({
-        host: config.host,
-        user: config.user,
-        password: config.password,
-        port: config.port,
-        ssl: {rejectUnauthorized: false}
-    });
+async function initDatabase(config) {
+  const connection = await mysql.createConnection({
+    host: config.host,
+    user: config.user,
+    password: config.password,
+    port: config.port,
+    ssl: { rejectUnauthorized: false },
+  });
 
-    await connection.query(`CREATE DATABASE IF NOT EXISTS \`${config.database}\`;`);
-    await connection.query(`USE \`${config.database}\`;`);
+  await connection.query(
+    `CREATE DATABASE IF NOT EXISTS \`${config.database}\`;`,
+  );
+  await connection.query(`USE \`${config.database}\`;`);
 
-    try{
-        await connection.query(`
+  try {
+    await connection.query(`
             CREATE TABLE IF NOT EXISTS Municipio(
                 id_municipio INT AUTO_INCREMENT PRIMARY KEY,
                 nombre_municipio VARCHAR(100) NOT NULL UNIQUE
             ); 
         `);
-        await connection.query(`
+    await connection.query(`
             CREATE TABLE IF NOT EXISTS Administrador(
                 id_admin INT AUTO_INCREMENT PRIMARY KEY,
                 correo VARCHAR(150) UNIQUE NOT NULL,
                 password_hash VARCHAR(255) NOT NULL
             );
         `);
-        await connection.query(`
+    await connection.query(`
             CREATE TABLE IF NOT EXISTS Categoria (
                 id_categoria INT AUTO_INCREMENT PRIMARY KEY,
                 nombre_categoria VARCHAR(100) NOT NULL UNIQUE
             );
         `);
-        await connection.query(`
+    await connection.query(`
             CREATE TABLE IF NOT EXISTS Subcategoria(
                 id_subcategoria INT AUTO_INCREMENT PRIMARY KEY,
                 nombre_subcategoria VARCHAR(100) NOT NULL,
@@ -40,50 +42,50 @@ async function initDatabase(config){
                 FOREIGN KEY (id_categoria) REFERENCES Categoria(id_categoria)
                 ON DELETE CASCADE ON UPDATE CASCADE
             );
-        `)
-        await connection.query(`
+        `);
+    await connection.query(`
             CREATE TABLE IF NOT EXISTS Modalidad (
                 id_modalidad INT AUTO_INCREMENT PRIMARY KEY,
                 nombre_modalidad VARCHAR(100) NOT NULL UNIQUE
             );
             `);
 
-        await connection.query(`
+    await connection.query(`
             CREATE TABLE IF NOT EXISTS Turno (
                 id_turno INT AUTO_INCREMENT PRIMARY KEY,
                 nombre_turno VARCHAR(50) NOT NULL UNIQUE
             );
         `);
 
-        await connection.query(`
+    await connection.query(`
             CREATE TABLE IF NOT EXISTS Sostenimiento (
                 id_sostenimiento INT AUTO_INCREMENT PRIMARY KEY,
                 nombre_sostenimiento VARCHAR(50) NOT NULL UNIQUE
             );
         `);
 
-        await connection.query(`
+    await connection.query(`
             CREATE TABLE IF NOT EXISTS NivelEducativo (
                 id_nivelEducativo INT AUTO_INCREMENT PRIMARY KEY,
                 nombre_nivelEducativo VARCHAR(100) NOT NULL UNIQUE
             );
         `);
 
-        await connection.query(`
+    await connection.query(`
             CREATE TABLE IF NOT EXISTS EstadoPropuesta (
                 id_estadoPropuesta INT AUTO_INCREMENT PRIMARY KEY,
                 nombre_estado VARCHAR(50) NOT NULL UNIQUE
             );
         `);
 
-        await connection.query(`
+    await connection.query(`
             CREATE TABLE IF NOT EXISTS Unidad (
                 id_unidad INT AUTO_INCREMENT PRIMARY KEY,
                 nombre_unidad VARCHAR(50) NOT NULL UNIQUE
             );
         `);
 
-        await connection.query(`
+    await connection.query(`
             CREATE TABLE IF NOT EXISTS Escuela (
                 id_escuela INT AUTO_INCREMENT PRIMARY KEY,
                 nombre VARCHAR(150) NOT NULL,
@@ -108,7 +110,7 @@ async function initDatabase(config){
             );
         `);
 
-        await connection.query(`
+    await connection.query(`
             CREATE TABLE IF NOT EXISTS Escuela_NivelEducativo (
                 id_escuela INT,
                 id_nivelEducativo INT,
@@ -120,7 +122,7 @@ async function initDatabase(config){
             );
         `);
 
-        await connection.query(`
+    await connection.query(`
             CREATE TABLE IF NOT EXISTS Propuesta (
                 id_propuesta INT AUTO_INCREMENT PRIMARY KEY,
                 propuesta VARCHAR(255) NOT NULL,
@@ -141,7 +143,7 @@ async function initDatabase(config){
             );
         `);
 
-        await connection.query(`
+    await connection.query(`
             CREATE TABLE IF NOT EXISTS RespuestaFormulario (
                 id_respuesta INT AUTO_INCREMENT PRIMARY KEY,
                 nombre_donate VARCHAR(150),
@@ -164,7 +166,7 @@ async function initDatabase(config){
             );
         `);
 
-        await connection.query(`
+    await connection.query(`
             CREATE TABLE IF NOT EXISTS FotosEscuelas (
                 id_foto     INT AUTO_INCREMENT PRIMARY KEY,
                 foto_nombre VARCHAR(255),
@@ -176,8 +178,7 @@ async function initDatabase(config){
             );
         `);
 
-
-        await connection.query(`
+    await connection.query(`
             CREATE OR REPLACE VIEW vista_escuelas AS
             SELECT
             e.id_escuela,
@@ -217,7 +218,7 @@ async function initDatabase(config){
             m.nombre_municipio, mo.nombre_modalidad, t.nombre_turno, s.nombre_sostenimiento;
         `);
 
-        await connection.query(`
+    await connection.query(`
             CREATE OR REPLACE VIEW vista_propuestas AS
             SELECT
             p.id_propuesta         AS id_necesidad,
@@ -240,29 +241,35 @@ async function initDatabase(config){
             LEFT JOIN Unidad         u  ON p.id_unidad           = u.id_unidad;
         `);
 
-        const [existingCols] = await connection.query(`
+    const [existingCols] = await connection.query(`
             SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
             WHERE TABLE_SCHEMA = DATABASE()
               AND TABLE_NAME   = 'FotosEscuelas'
         `);
-        const colNames = existingCols.map(r => r.COLUMN_NAME);
+    const colNames = existingCols.map((r) => r.COLUMN_NAME);
 
-        if (!colNames.includes('foto_nombre'))
-            await connection.query(`ALTER TABLE FotosEscuelas ADD COLUMN foto_nombre VARCHAR(255)`);
-        if (!colNames.includes('foto_mime'))
-            await connection.query(`ALTER TABLE FotosEscuelas ADD COLUMN foto_mime VARCHAR(100)`);
-        if (!colNames.includes('foto_data'))
-            await connection.query(`ALTER TABLE FotosEscuelas ADD COLUMN foto_data MEDIUMBLOB`);
-        if (colNames.includes('foto_link'))
-            await connection.query(`ALTER TABLE FotosEscuelas DROP COLUMN foto_link`);
+    if (!colNames.includes("foto_nombre"))
+      await connection.query(
+        `ALTER TABLE FotosEscuelas ADD COLUMN foto_nombre VARCHAR(255)`,
+      );
+    if (!colNames.includes("foto_mime"))
+      await connection.query(
+        `ALTER TABLE FotosEscuelas ADD COLUMN foto_mime VARCHAR(100)`,
+      );
+    if (!colNames.includes("foto_data"))
+      await connection.query(
+        `ALTER TABLE FotosEscuelas ADD COLUMN foto_data MEDIUMBLOB`,
+      );
+    if (colNames.includes("foto_link"))
+      await connection.query(`ALTER TABLE FotosEscuelas DROP COLUMN foto_link`);
 
-        await connection.query(`DELETE FROM FotosEscuelas WHERE foto_data IS NULL`);
+    await connection.query(`DELETE FROM FotosEscuelas WHERE foto_data IS NULL`);
 
     console.log("Database was successfully created :DDD");
-    }catch(err){
-        console.error("Database couldn't be initialized: ", err);
-    } finally{
-        await connection.end();
-    }
+  } catch (err) {
+    console.error("Database couldn't be initialized: ", err);
+  } finally {
+    await connection.end();
+  }
 }
 module.exports = initDatabase;

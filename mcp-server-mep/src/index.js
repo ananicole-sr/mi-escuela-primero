@@ -1,7 +1,7 @@
 // import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { z } from "zod"; 
+import { z } from "zod";
 import fs from "fs/promises";
 import path from "path";
 
@@ -15,7 +15,8 @@ process.on("unhandledRejection", (err) => {
   process.exit(1);
 });
 
-const ROOT = "C:/Users/danna/Desktop/TEC/4th semester/Software construction and decision making/miEscuelaPrimero/mi-escuela-primero";
+const ROOT =
+  "C:/Users/danna/Desktop/TEC/4th semester/Software construction and decision making/miEscuelaPrimero/mi-escuela-primero";
 
 const server = new McpServer({
   name: "mcp-dev-mep",
@@ -25,23 +26,23 @@ const server = new McpServer({
 const transport = new StdioServerTransport();
 
 server.tool(
-    "hello_world_mep",
-    {
-        // inputSchema: {
-        //     name: z.string(),
-        // },
-        name: z.string(),
-    },
-    async ({ name }) => {
-        return {
-            content: [
-                {
-                    type: "text",
-                    text: `Hola ${name}, tu MCP funciona`,
-                },
-            ],
-        };
-    }
+  "hello_world_mep",
+  {
+    // inputSchema: {
+    //     name: z.string(),
+    // },
+    name: z.string(),
+  },
+  async ({ name }) => {
+    return {
+      content: [
+        {
+          type: "text",
+          text: `Hola ${name}, tu MCP funciona`,
+        },
+      ],
+    };
+  },
 );
 
 server.tool(
@@ -53,128 +54,134 @@ server.tool(
     path: z.string(),
   },
   async ({ path: filePath }) => {
-  try {
-    const safePath = path.isAbsolute(filePath)
-      ? filePath
-      : path.join(ROOT, filePath);
+    try {
+      const safePath = path.isAbsolute(filePath)
+        ? filePath
+        : path.join(ROOT, filePath);
 
-    const fullPath = path.resolve(safePath);
+      const fullPath = path.resolve(safePath);
 
-    // if (!fullPath.startsWith(ROOT)) {
-    const relative = path.relative(ROOT, fullPath);
-    if (relative.startsWith("..") || path.isAbsolute(relative)) {
+      // if (!fullPath.startsWith(ROOT)) {
+      const relative = path.relative(ROOT, fullPath);
+      if (relative.startsWith("..") || path.isAbsolute(relative)) {
+        return {
+          content: [{ type: "text", text: "Acceso denegado" }],
+        };
+      }
+
+      const content = await fs.readFile(fullPath, "utf-8");
+
       return {
-        content: [{ type: "text", text: "Acceso denegado" }],
+        content: [{ type: "text", text: content }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text", text: `Error: ${err.message}` }],
       };
     }
-
-    const content = await fs.readFile(fullPath, "utf-8");
-
-    return {
-      content: [{ type: "text", text: content }],
-    };
-  } catch (err) {
-    return {
-      content: [{ type: "text", text: `Error: ${err.message}` }],
-    };
-  }
-}
+  },
 );
 
-async function searchFiles(dir, query, results = [], depth = 0, startTime = Date.now()) {
+async function searchFiles(
+  dir,
+  query,
+  results = [],
+  depth = 0,
+  startTime = Date.now(),
+) {
   if (results.length >= 50) return results;
-  
+
   const TIME_LIMIT = 5000; // 5 seconds
 
   if (Date.now() - startTime > TIME_LIMIT) {
-      return results;
-  }  
+    return results;
+  }
 
   if (depth > 10) return results;
   const lowerQuery = query.toLowerCase();
 
-    const files = await fs.readdir(dir);
-    
-    for (const file of files) {
-        const fullPath = path.join(dir, file);
+  const files = await fs.readdir(dir);
 
-        let stat;
-        try {
-            stat = await fs.stat(fullPath);
-        } catch (err) {
-            console.log(err);
-            continue;
-        }
-        
-        if (stat.isDirectory()) {
-            if (
-                file === "node_modules" ||
-                file === ".next" ||
-                file === "dist" ||
-                file === "build" ||
-                file.startsWith(".")
-            ) continue;
+  for (const file of files) {
+    const fullPath = path.join(dir, file);
 
-            await searchFiles(fullPath, query, results, depth + 1, startTime);
-            if (results.length >= 50) return results;
-
-        } else {
-            if (
-                !file.endsWith(".js") &&
-                !file.endsWith(".ts") &&
-                !file.endsWith(".tsx") &&
-                !file.endsWith(".jsx") &&
-                !file.endsWith(".json")
-            ) continue;
-
-             // SKIP LARGE FILES
-            if (stat.size > 200_000) continue;
-
-            const content = await fs.readFile(fullPath, "utf-8");
-
-            const lowerContent = content.toLowerCase();
-            // const lowerQuery = query.toLowerCase();
-
-            // if (lowerContent.includes(lowerQuery)) {
-            //     results.push(path.relative(ROOT, fullPath));
-            // }
-            if (lowerContent.includes(lowerQuery)) {
-                results.push(path.relative(ROOT, fullPath));
-
-                // 🔴 LIMIT RESULTS
-                if (results.length >= 50) return results;
-            }
-        }
+    let stat;
+    try {
+      stat = await fs.stat(fullPath);
+    } catch (err) {
+      console.log(err);
+      continue;
     }
-    
-    return results;
+
+    if (stat.isDirectory()) {
+      if (
+        file === "node_modules" ||
+        file === ".next" ||
+        file === "dist" ||
+        file === "build" ||
+        file.startsWith(".")
+      )
+        continue;
+
+      await searchFiles(fullPath, query, results, depth + 1, startTime);
+      if (results.length >= 50) return results;
+    } else {
+      if (
+        !file.endsWith(".js") &&
+        !file.endsWith(".ts") &&
+        !file.endsWith(".tsx") &&
+        !file.endsWith(".jsx") &&
+        !file.endsWith(".json")
+      )
+        continue;
+
+      // SKIP LARGE FILES
+      if (stat.size > 200_000) continue;
+
+      const content = await fs.readFile(fullPath, "utf-8");
+
+      const lowerContent = content.toLowerCase();
+      // const lowerQuery = query.toLowerCase();
+
+      // if (lowerContent.includes(lowerQuery)) {
+      //     results.push(path.relative(ROOT, fullPath));
+      // }
+      if (lowerContent.includes(lowerQuery)) {
+        results.push(path.relative(ROOT, fullPath));
+
+        // 🔴 LIMIT RESULTS
+        if (results.length >= 50) return results;
+      }
+    }
+  }
+
+  return results;
 }
 
 server.tool(
-    "search_code",
-    {
-        query: z.string(),
-    },
-    async ({ query }) => {
-      console.error("SEARCH START:", query);
+  "search_code",
+  {
+    query: z.string(),
+  },
+  async ({ query }) => {
+    console.error("SEARCH START:", query);
 
-      const start = Date.now();
-      const results = await searchFiles(ROOT, query);
-      const duration = Date.now() - start;
+    const start = Date.now();
+    const results = await searchFiles(ROOT, query);
+    const duration = Date.now() - start;
 
-      console.error("SEARCH DONE:", duration, "ms", results.length, "results");
+    console.error("SEARCH DONE:", duration, "ms", results.length, "results");
 
-      return {
-          content: [
-              {
-                  type: "text",
-                  text: results.join("\n") || "No encontrado",
-              },
-          ],
-      };
-  }
+    return {
+      content: [
+        {
+          type: "text",
+          text: results.join("\n") || "No encontrado",
+        },
+      ],
+    };
+  },
 );
-
 
 server.tool(
   "get_components",
@@ -197,16 +204,13 @@ server.tool(
           const propName = match[1];
           const raw = match[2];
 
-          const values = raw
-            .split("|")
-            .map(v => v.replace(/"/g, "").trim());
+          const values = raw.split("|").map((v) => v.replace(/"/g, "").trim());
 
           variants[propName] = values;
         }
 
         return variants;
       }
-
 
       function extractStates(content) {
         const states = new Set();
@@ -219,7 +223,6 @@ server.tool(
 
         return Array.from(states);
       }
-
 
       function classifyComponent(name) {
         const lower = name.toLowerCase();
@@ -248,16 +251,12 @@ server.tool(
           return "overlay";
         }
 
-        if (
-          lower.includes("table") ||
-          lower.includes("list")
-        ) {
+        if (lower.includes("table") || lower.includes("list")) {
           return "data";
         }
 
         return "unknown";
       }
-
 
       async function scan(dir, depth = 0) {
         if (depth > 6) return;
@@ -281,7 +280,8 @@ server.tool(
               file === "dist" ||
               file === "build" ||
               file.startsWith(".")
-            ) continue;
+            )
+              continue;
 
             await scan(fullPath, depth + 1);
           } else {
@@ -292,7 +292,7 @@ server.tool(
             const content = await fs.readFile(fullPath, "utf-8");
 
             const matches = content.match(
-              /export\s+(default\s+)?function\s+([A-Z][A-Za-z0-9]+)/g
+              /export\s+(default\s+)?function\s+([A-Z][A-Za-z0-9]+)/g,
             );
 
             if (!matches) continue;
@@ -325,9 +325,7 @@ server.tool(
         content: [
           {
             type: "text",
-            text:
-              JSON.stringify(results, null, 2) ||
-              "No components found",
+            text: JSON.stringify(results, null, 2) || "No components found",
           },
         ],
       };
@@ -341,10 +339,8 @@ server.tool(
         ],
       };
     }
-  }
+  },
 );
-
-
 
 try {
   await server.connect(transport);

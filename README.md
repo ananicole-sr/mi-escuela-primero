@@ -34,6 +34,7 @@ This project is part of the "Mexicanos Primeros" initiative to support primary e
 ## Features
 
 ### For Users
+
 - **School Catalog**: Browse and search for schools by name and location
 - **School Details**: View comprehensive information about each school, including needs and current projects
 - **Interactive Map**: Discover schools geographically using Leaflet maps
@@ -42,6 +43,7 @@ This project is part of the "Mexicanos Primeros" initiative to support primary e
 - **User Authentication**: Secure login and registration system
 
 ### For Administrators
+
 - **School Management**: Add, edit, and delete school information
 - **Needs Management**: Create and manage school needs/requirements
 - **Donor Responses**: Track and manage donor responses
@@ -52,6 +54,7 @@ This project is part of the "Mexicanos Primeros" initiative to support primary e
 ## Tech Stack
 
 ### Frontend
+
 - **React 19.2.0** - UI library
 - **Vite 7.3.1** - Lightning-fast build tool
 - **React Router DOM 7.13.1** - Client-side routing
@@ -63,6 +66,7 @@ This project is part of the "Mexicanos Primeros" initiative to support primary e
 - **ESLint 9.39.1** - Code linting
 
 ### Backend
+
 - **Node.js + Express 5.2.1** - Server framework
 - **MySQL2 3.22.0** - Database driver
 - **JWT 9.0.3** - Authentication token management
@@ -146,6 +150,7 @@ mi-escuela-primero/
 ## Installation
 
 ### Prerequisites
+
 - **Node.js** (v14 or higher)
 - **npm** (v6 or higher)
 - **MySQL** (v5.7 or higher)
@@ -160,12 +165,14 @@ cd mi-escuela-primero
 ### Step 2: Install Dependencies
 
 **Backend:**
+
 ```bash
 cd backend
 npm install
 ```
 
 **Frontend:**
+
 ```bash
 cd ../frontend
 npm install
@@ -201,7 +208,7 @@ MAX_FILE_SIZE=10485760  # 10MB in bytes
 The frontend API endpoint is configured in `frontend/src/services/api.js`:
 
 ```javascript
-const API_URL = 'http://localhost:3000/api';
+const API_URL = "http://localhost:3000/api";
 ```
 
 Adjust this if your backend runs on a different port or domain.
@@ -222,6 +229,7 @@ The database will be initialized with the schema and seed data when you first ru
 ### Development Mode
 
 **Terminal 1 - Backend:**
+
 ```bash
 cd backend
 npm run dev
@@ -230,6 +238,7 @@ npm run dev
 The backend server will start on `http://localhost:3000`
 
 **Terminal 2 - Frontend:**
+
 ```bash
 cd frontend
 npm run dev
@@ -240,12 +249,14 @@ The frontend development server will start on `http://localhost:5173`
 ### Production Mode
 
 **Build Frontend:**
+
 ```bash
 cd frontend
 npm run build
 ```
 
 **Start Backend:**
+
 ```bash
 cd backend
 npm start
@@ -254,10 +265,12 @@ npm start
 ## API Endpoints
 
 ### Authentication
+
 - `POST /api/login` - User login
 - `POST /api/register` - User registration
 
 ### Schools
+
 - `GET /api/escuelas` - Get all schools
 - `GET /api/escuelas/:id` - Get school details
 - `POST /api/escuelas` - Create new school (Admin)
@@ -265,12 +278,14 @@ npm start
 - `DELETE /api/escuelas/:id` - Delete school (Admin)
 
 ### Needs/Donations
+
 - `GET /api/necesidades` - Get all needs
 - `POST /api/necesidades` - Create need (Admin)
 - `PUT /api/necesidades/:id` - Update need (Admin)
 - `DELETE /api/necesidades/:id` - Delete need (Admin)
 
 ### Donor Responses
+
 - `GET /api/respuestas` - Get donor responses
 - `POST /api/respuestas` - Create donor response
 - `GET /api/respuestas/:id` - Get response details
@@ -298,6 +313,7 @@ Follow the prompts to add an admin account.
 ## Development
 
 ### Code Style
+
 The project uses ESLint for code quality. Run the linter:
 
 ```bash
@@ -308,12 +324,14 @@ npm run lint
 ### Available Scripts
 
 **Frontend:**
+
 - `npm run dev` - Start development server
 - `npm run build` - Build production bundle
 - `npm run preview` - Preview production build
 - `npm run lint` - Check code quality
 
 **Backend:**
+
 - `npm start` - Start production server
 - `npm run dev` - Start development server with auto-reload
 - `npm test` - Run tests (not yet implemented)
